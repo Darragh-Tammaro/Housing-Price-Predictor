@@ -30,6 +30,11 @@ if not os.path.exists(excel_path):
         f"\nMake sure {excel_file} is in the same folder as this script"
     )
     
+df = pd.read_excel(excel_path)
+print(f"Loaded {len(df):,} rows and {len(df.columns)} columns")
 
-
-    
+missing = [z for z in variable_columns + [price_column] if z not in df.columns]
+if missing:
+    raise ValueError(
+        f"\nThese columns weren't found in the dataset: {missing}\n"
+    )
