@@ -10,7 +10,7 @@ variable_columns = ["area","bedrooms","bathrooms","stories",
                     "mainroad", "guestroom", "basement", "parking"]
 
 learnRate = 0.001
-epoch = 200
+epochs = 200
 size = 64
 
 
@@ -67,6 +67,42 @@ y_test = scaler_y.transform(y_test)
 print(f"\nSamples for training: {X_train.shape[0]:,}")
 print(f"Samples for testing: {X_test.shape[0]:,}")
 print(f"Feature for each sample {n_features}\n")
+
+np.random.seed(42)
+W1 = np.random.randn(n_features, 64) * np.sqrt(2 / n_features)
+W2 = np.random.randn(64,32) * np.sqrt(2 / 64)
+W3 = np.random.randn(32,1) * np.sqrt(2 / 32)
+
+B1 = np.zeros((1,64))
+B2 = np.zeros((1,32))
+B3 = np.zeros((1,1))
+
+losses = []
+print("Training please wait\n")
+num_samples = X_train.shape[0]
+
+for epoch in range(epochs): 
+    indices = np.random.permutation(num_samples)
+    ShuffleX = X_train[indices]
+    ShuffleY = y_train[indices]
+    for start in range(0, num_samples, size):
+        BatchX = ShuffleX[start:start + size]
+        BatchY = ShuffleY[start:start + size]
+
+        #forward pass starts here 
+
+        Z1 = BatchX @ W1 + B1     #hidden 1
+        A1 = relu(Z1)
+
+        Z2 = A1 @ W2 + B2     #hidden 2
+        A2 = relu(Z2)
+
+        Z3 = A2 @ W3 + B3    #output lay
+        predictionY = Z3 
+        loss = np.mean((BatchY - predictionY) ** 2)  
+
+
+
 
 
 
