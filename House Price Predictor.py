@@ -99,7 +99,42 @@ for epoch in range(epochs):
 
         Z3 = A2 @ W3 + B3    #output lay
         predictionY = Z3 
-        loss = np.mean((BatchY - predictionY) ** 2)  
+
+        #backwards pass starts
+
+        d_Z3 = (predictionY - BatchY) / len(BatchY)
+        dW3 = A2.T @ d_Z3
+        dB3 = np.sum(d_Z3, axis=0, keepdims=True)
+
+        d_A2 = d_Z3 @ W3.T
+        d_Z2 = d_A2 * relu_deriv(Z2)
+        dW2 = A1.T @ d_Z2
+        dB2 = np.sum(d_Z2, axis=0, keepdims=True)
+
+        d_A1 = d_Z2 @ W2.T
+        d_Z1 = d_A1 * relu_deriv(Z1)
+        dW1 = BatchX.T @ d_Z1
+        dB1 = np.sum(d_Z1, axis=0, keepdims=True)
+
+        W3 -= learnRate* dW3
+        B3 -= learnRate * dB3
+        W2 -= learnRate * dW2
+        B2 -= learnRate * dB2
+        W1 -= learnRate * dW1
+        B1 -= learnRate * dB1
+    
+    Z1_f = X_train @ W1 + B1; A1_f = relu(Z1_f)
+    Z2_f = A1_f @ W2 + B2; A2_f = relu(Z2_f)
+    Z3_f = A2_f @ W3 + B3
+    epochLoss = np.mean((y_train - Z3_f) ** 2)
+    losses.append(epochLoss)
+    if epoch % 50 == 0:
+        print(f"Epoch {epoch:>3} / {epochs} | Loss: {epochLoss:.4f}")
+
+
+
+
+        
 
 
 
