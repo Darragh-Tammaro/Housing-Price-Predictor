@@ -131,6 +131,14 @@ for epoch in range(epochs):
     if epoch % 50 == 0:
         print(f"Epoch {epoch:>3} / {epochs} | Loss: {epochLoss:.4f}")
 
+Z1_t = X_test @ W1 + B1; A1_t = relu(Z1_t)
+Z2_t = A1_t @ W2 + B2; A2_t = relu(Z2_t)
+Z3_t = A2_t @ W3 + B3
+
+Yprediction_real = scaler_y.inverse_transform(Z3_t)
+Ytest_real = scaler_y.inverse_transform(y_test)
+mean_Unc = np.mean(np.abs(Ytest_real - Yprediction_real))
+
 
 
 
