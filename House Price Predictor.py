@@ -10,7 +10,7 @@ variable_columns = ["area","bedrooms","bathrooms","stories",
                     "mainroad", "guestroom", "basement", "parking"]
 
 learnRate = 0.001
-epochs = 200
+epochs = 400
 size = 64
 
 
@@ -140,7 +140,14 @@ Ytest_real = scaler_y.inverse_transform(y_test)
 mean_Unc = np.mean(np.abs(Ytest_real - Yprediction_real))
 
 
+res_ss = np.sum((Ytest_real - Yprediction_real) ** 2)
+tot_ss = np.sum((Ytest_real - np.mean(Ytest_real)) ** 2)
+r2 = 1 - (res_ss / tot_ss)
 
+print(f"\n --- Results ---")
+print(f"Mean absolute uncertainty : ${mean_Unc:,.0f}")
+print(f"R2 Score : {r2:.4f}   (where 1.0 is considered perfect)")
+print(f" -------------")
 
         
 
