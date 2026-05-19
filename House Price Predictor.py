@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -10,7 +11,7 @@ variable_columns = ["area","bedrooms","bathrooms","stories",
                     "mainroad", "guestroom", "basement", "parking"]
 
 learnRate = 0.001
-epochs = 400
+epochs = 800
 size = 64
 
 
@@ -69,12 +70,12 @@ print(f"Samples for testing: {X_test.shape[0]:,}")
 print(f"Feature for each sample {n_features}\n")
 
 np.random.seed(42)
-W1 = np.random.randn(n_features, 64) * np.sqrt(2 / n_features)
-W2 = np.random.randn(64,32) * np.sqrt(2 / 64)
-W3 = np.random.randn(32,1) * np.sqrt(2 / 32)
+W1 = np.random.randn(n_features, 128) * np.sqrt(2 / n_features)
+W2 = np.random.randn(128,64) * np.sqrt(2 / 128)
+W3 = np.random.randn(64,1) * np.sqrt(2 / 64)
 
-B1 = np.zeros((1,64))
-B2 = np.zeros((1,32))
+B1 = np.zeros((1,128))
+B2 = np.zeros((1,64))
 B3 = np.zeros((1,1))
 
 losses = []
@@ -149,7 +150,18 @@ print(f"Mean absolute uncertainty : ${mean_Unc:,.0f}")
 print(f"R2 Score : {r2:.4f}   (where 1.0 is considered perfect)")
 print(f" -------------")
 
-        
+#PLOTTING GRAPH
+
+fig, axes = plt.subplots(1,2, figsize=(14,5))
+fig.suptitle("House Price Predictor - Neural Network from Scrath Project", fontsize = 14)
+
+axes[0].plot(losses, colour = "steelblue", linewidth = 1.5)
+axes[0].set_title("Training Loss / Time")
+axes[0].set_xlabel("Epoch")
+axes[0].set_ylable("Mean Error Squared (Scaled)")
+axes[0].grid(True,alpha=0.3)
+
+
 
 
 
