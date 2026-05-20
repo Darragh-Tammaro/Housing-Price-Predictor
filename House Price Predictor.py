@@ -8,7 +8,8 @@ from sklearn.preprocessing import StandardScaler
 excel_file = "Housing.csv"
 price_column = "price"
 variable_columns = ["area","bedrooms","bathrooms","stories",
-                    "mainroad", "guestroom", "basement", "parking"]
+                    "mainroad", "guestroom", "basement", "hotwaterheating", 
+                    "airconditioning","parking", "prefarea", "furnishingstatus"]
 
 learnRate = 0.001
 epochs = 800
@@ -27,7 +28,7 @@ print(f"\nLooking for file in: {script_direction}")
 
 excel_path = os.path.join(script_direction, excel_file)
 
-print(f"Attepmting to load dataset: {excel_file} please wait\n")
+print(f"Attempting to load dataset: {excel_file} please wait\n")
 
 if not os.path.exists(excel_path):
     raise FileNotFoundError(
@@ -37,8 +38,15 @@ if not os.path.exists(excel_path):
     
 df = pd.read_csv(excel_path)
 print(f"Loaded {len(df):,} rows and {len(df.columns)} columns")
-yes_or_no = ["mainroad","guestroom","basement"]
+yes_or_no = ["mainroad","guestroom","basement", "hotwaterheating",
+             "airconditioning","prefarea"]
 df[yes_or_no] = df[yes_or_no].apply(lambda col:col.map({"yes":1,"no":0}))
+df["furnishingstatus"] = df["furnishingstatus"].map({
+    "furnished": 2,
+    "semi-furnished": 1,
+    "unfurnished": 0
+})
+
 
 missing = [z for z in variable_columns + [price_column] if z not in df.columns]
 if missing:
@@ -153,15 +161,33 @@ print(f" -------------")
 #PLOTTING GRAPH
 
 fig, axes = plt.subplots(1,2, figsize=(14,5))
-fig.suptitle("House Price Predictor - Neural Network from Scrath Project", fontsize = 14)
+fig.suptitle("House Price Predictor - Neural Network from Scratch", fontsize = 14)
 
-axes[0].plot(losses, colour = "steelblue", linewidth = 1.5)
+axes[0].plot(losses, color = "steelblue", linewidth = 1.5)
 axes[0].set_title("Training Loss / Time")
 axes[0].set_xlabel("Epoch")
-axes[0].set_ylable("Mean Error Squared (Scaled)")
+axes[0].set_ylabel("Mean Error Squared (Scaled)")
 axes[0].grid(True,alpha=0.3)
 
+axes[1].scatter(Ytest_real, Yprediction_real, alpha=0.3, s=8, color="steelblue")
+max_value = max(Ytest_real.max(), Yprediction_real.max())
+min_value = min(Ytest_real.max(), Yprediction_real.max())
+axes[1].plot([min_value, max_value], [min_value, max_value], color="red", linewidth=1.5, linestyle="--", label = "Perfect Prediction")
+axes[1].set_title("Predicted vs Actual Prices")
+axes[1].set_xlabel(f"Actual {price_column}")
+axes[1].set_ylabel(f"Predicted {price_column}")
+axes[1].legend()
+axes[1].grid(True, alpha=0.3)
+plt.tight_layout()
 
+save = input("\nWould you like to save the results graph (yes/no): ").strip().lower()
+if save in ("yes", "y"):
+    save_path = os.path.join(script_direction, "results.png")
+    plt.savefig(save_path, dpi=150, bbox_inches="tight")
+    print(f"Graph saved to: {save_path}")
+else:
+    print("Graph not saved")    
+plt.show()
 
 
 
