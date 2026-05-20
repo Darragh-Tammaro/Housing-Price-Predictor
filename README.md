@@ -26,7 +26,7 @@ Building a neural network from scratch without ML frameworks, implementing forwa
 
 ## Results graph
 
-![Results](results.png)
+
 
 
 
