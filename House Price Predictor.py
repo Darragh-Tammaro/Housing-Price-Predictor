@@ -171,7 +171,7 @@ axes[0].grid(True,alpha=0.3)
 
 axes[1].scatter(Ytest_real, Yprediction_real, alpha=0.3, s=8, color="steelblue")
 max_value = max(Ytest_real.max(), Yprediction_real.max())
-min_value = min(Ytest_real.max(), Yprediction_real.max())
+min_value = min(Ytest_real.min(), Yprediction_real.min())
 axes[1].plot([min_value, max_value], [min_value, max_value], color="red", linewidth=1.5, linestyle="--", label = "Perfect Prediction")
 axes[1].set_title("Predicted vs Actual Prices")
 axes[1].set_xlabel(f"Actual {price_column}")
