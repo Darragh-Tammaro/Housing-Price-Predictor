@@ -15,7 +15,7 @@ A neural network built purely with NumPy that predicts house prices from a Kaggl
 3. Run: python "House Price Predictor.py"
 
 ## What this project demonstrates
-Building a neural network from scratch without ML frameworks, implementing forward propagation, backpropagation, and gradient descent manually using only NumPy.
+Building a neural network from scratch without ML frameworks, demonstrating fundamentals such as forward propagation, backpropagation, and gradient descent manually using only NumPy.
 
 ## Used Libraries
 
